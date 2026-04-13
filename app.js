@@ -99,7 +99,7 @@ window.mostrarFormulario = (escuela) => {
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Grupo</label>
-                            <select name="grupo" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-igniOrange text-sm">
+                            <select name="grupo" id="selectGrupo" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-igniOrange text-sm">
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                             </select>
@@ -133,7 +133,7 @@ window.mostrarFormulario = (escuela) => {
         </div>
     `;
 
-    // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
+    // --- LÓGICA DE ENVÍO Y ASIGNACIÓN ---
     document.getElementById('registroForm').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -144,9 +144,12 @@ window.mostrarFormulario = (escuela) => {
         const formData = new FormData(e.target);
         const datos = Object.fromEntries(formData.entries());
 
+        // Limpieza de datos del grupo
+        const grupoFinal = datos.grupo.trim().toUpperCase();
+
         try {
-            // REEMPLAZA ESTA URL CON LA QUE TE DIO GOOGLE APPS SCRIPT
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzRPWReFoMx7LnnDleYMOptgSasPjDNvU-_gHaaoXod6jhW6fxfQJX98sVhnobLYQsj/exec';
+            // !!! REEMPLAZA ESTO CON TU URL DE GOOGLE !!!
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzRPWReFoMx7LnnDleYMOptgSasPjDNvU-_gHaaoXod6jhW6fxfQJX98sVhnobLYQsj/exec'; 
             
             await fetch(scriptURL, {
                 method: 'POST',
@@ -154,7 +157,8 @@ window.mostrarFormulario = (escuela) => {
                 body: JSON.stringify(datos)
             });
             
-            mostrarExito();
+            // Pasamos el grupo final a la pantalla de éxito
+            mostrarExito(grupoFinal); 
         } catch (error) {
             console.error('Error!', error.message);
             alert("Error al enviar. Verifica tu conexión.");
@@ -164,21 +168,42 @@ window.mostrarFormulario = (escuela) => {
     };
 };
 
-// --- PANTALLA FINAL: ÉXITO ---
-function mostrarExito() {
+// --- PANTALLA FINAL: ÉXITO CON LÓGICA DE MAESTROS ---
+function mostrarExito(grupo) {
+    let nombreMaestro = "";
+    
+    // Si eligieron A es Jesús, si no (B) es Adan
+    if (grupo === "A") {
+        nombreMaestro = "Jesús Ramón Gastelum Quijada";
+    } else {
+        nombreMaestro = "Adan Alberto Roman Carrillo";
+    }
+
     app.innerHTML = `
         <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden text-center"
              style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
             
             ${decoracionCircuitos()}
 
-            <div class="relative z-10">
+            <div class="relative z-10 animate-fade-in">
                 <div class="text-6xl mb-6">🔥</div>
                 <h2 class="text-4xl font-black text-gray-900 mb-4 italic">¡Registro Exitoso!</h2>
-                <p class="text-xl text-gray-700 max-w-sm leading-relaxed font-medium mx-auto px-4">
+                
+                <div class="bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-white shadow-xl max-w-sm mx-auto mb-8">
+                    <p class="text-[10px] text-gray-400 uppercase font-black tracking-[0.2em] mb-2">Tu instructor asignado:</p>
+                    <p class="text-xl text-igniRed font-black italic leading-tight">
+                        ${nombreMaestro}
+                    </p>
+                    <div class="mt-3 inline-block px-3 py-1 bg-gray-100 rounded-full text-[10px] font-bold text-gray-500 uppercase">
+                        Taller Grupo ${grupo}
+                    </div>
+                </div>
+
+                <p class="text-lg text-gray-700 max-w-sm leading-relaxed font-medium mx-auto px-4 mb-10">
                     Prepara tus herramientas, el futuro te espera. Los maestros de la Benemérito ya tienen tu lugar apartado.
                 </p>
-                <button onclick="mostrarInicio()" class="mt-12 text-igniRed font-black border-b-2 border-igniRed pb-1 uppercase text-xs tracking-widest">
+
+                <button onclick="location.reload()" class="text-gray-900 font-black border-b-2 border-gray-900 pb-1 uppercase text-[10px] tracking-widest hover:text-igniRed hover:border-igniRed transition-all">
                     Terminar
                 </button>
             </div>
