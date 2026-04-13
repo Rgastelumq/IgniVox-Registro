@@ -1,1 +1,0 @@
-# IgniVox-Registro
