@@ -1,6 +1,34 @@
 const app = document.getElementById('app');
+let estadoRegistro = {
+    especialidad: '',
+    instructor: '',
+    color: 'igniOrange'
+};
+function getGradientStyle(color) {
+    if (color === 'teal') {
+        return "background: linear-gradient(to bottom, #FFFFFF 40%, #F0FDFA 80%, #CCFBF1 100%) !important;";
+    } 
+    if (color === 'purple') {
+        return "background: linear-gradient(to bottom, #FFFFFF 40%, #F5F3FF 80%, #fdd8fd 100%) !important;";
+    }
+    return "background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%) !important;";
+}
+function generarCodigoAlumno() {
+    const esp = String(estadoRegistro.especialidad || '').toLowerCase();
+    
+    let prefijo = 'gen';
+    if (esp.includes('programación') || esp.includes('programacion')) {
+        prefijo = 'prog';
+    } else if (esp.includes('mecatrónica') || esp.includes('mecatronica')) {
+        prefijo = 'mec';
+    }
+    
+    const numero = Math.floor(100 + Math.random() * 900);
+    
+    return `PAT-${prefijo}-${numero}`;
+}
 
-function mostrarInicio() {
+    function mostrarInicio() {
     app.innerHTML = `
         <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
              style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
@@ -8,14 +36,14 @@ function mostrarInicio() {
             ${decoracionCircuitos()}
 
             <div class="relative z-10 text-center flex flex-col items-center max-w-lg animate-fade-in">
-                <img src="logo.png" alt="IgniVox" class="w-32 h-32 object-contain mb-8 drop-shadow-md">
+                <img src="logo-ignivox.png" alt="IgniVox" class="w-32 h-32 object-contain mb-8 drop-shadow-md">
                 
                 <h1 class="text-6xl font-black text-gray-900 tracking-tighter mb-2 italic text-gray-900">IgniVox</h1>
                 <div class="h-1.5 w-20 bg-gradient-to-r from-igniRed to-igniOrange mx-auto mb-4 rounded-full"></div>
                 <p class="text-lg text-gray-500 font-bold uppercase tracking-[0.2em] mb-8">Talleres de robótica</p>
 
                 <div class="flex flex-col gap-4 w-full max-w-xs">
-                    <button onclick="mostrarSeleccionEscuela()" class="px-8 py-4 text-white font-black text-lg rounded-xl 
+                    <button onclick="mostrarEspecialidad()" class="px-8 py-4 text-white font-black text-lg rounded-xl 
                                        bg-gradient-to-r from-igniRed to-igniOrange shadow-lg hover:shadow-orange-300 transition-all active:scale-95">
                         REGISTRARSE
                     </button>
@@ -32,21 +60,107 @@ function mostrarInicio() {
     `;
 }
 
-window.mostrarSeleccionEscuela = () => {
+window.mostrarEspecialidad = () => {
     app.innerHTML = `
-        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6"
              style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
             
-            ${decoracionCircuitos()}
+            <div class="relative z-10 w-full max-w-md text-center">
+                <h2 class="text-3xl font-black text-gray-900 mb-8 italic tracking-tighter">ELIGE TU ÁREA</h2>
+                
+                <div class="space-y-4">
+                    <div class="relative">
+                        <button onclick="seleccionarEspecialidad('Programación', 'Jesús Ramón Gastelum Quijada', 'teal')" 
+                                class="w-full p-6 rounded-3xl bg-gradient-to-r from-teal-400 to-cyan-600 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
+                            <div class="bg-white p-3 rounded-2xl">
+                                <img src="logo-ignivox-programacion.png" alt="Prog" class="w-12 h-12 object-contain">
+                            </div>
+                            <div class="text-left">
+                                <span class="block text-xl font-black italic">PROGRAMACIÓN</span>
+                                <span class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Software & PWA</span>
+                            </div>
+                        </button>
+                        <button onclick="mostrarInfoTaller('programacion')" 
+                                class="absolute bottom-2 right-4 text-[9px] font-bold text-white underline opacity-70 hover:opacity-100 uppercase">
+                            Más información
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <button onclick="seleccionarEspecialidad('Mecatronica', 'Adan Alberto Roman Carrillo', 'purple')" 
+                                class="w-full p-6 rounded-3xl bg-gradient-to-r from-purple-500 to-indigo-700 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
+                            <div class="bg-white p-3 rounded-2xl">
+                                <img src="logo-ignivox-mecatronica.png" alt="Meca" class="w-12 h-12 object-contain">
+                            </div>
+                            <div class="text-left">
+                                <span class="block text-xl font-black italic">MECATRÓNICA</span>
+                                <span class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Automatización & Robótica</span>
+                            </div>
+                        </button>
+                        <button onclick="mostrarInfoTaller('mecatronica')" 
+                                class="absolute bottom-2 right-4 text-[9px] font-bold text-white underline opacity-70 hover:opacity-100 uppercase">
+                            Más información
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="mostrarInicio()" class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
+                    ← Volver
+                </button>
+            </div>
+        </div>
+    `;
+};
+
+window.seleccionarEspecialidad = (especialidad, instructor, color) => {
+    estadoRegistro = { especialidad, instructor, color };
+    mostrarSeleccionEscuela();
+};
+
+window.mostrarInfoTaller = (taller) => {
+    const info = {
+        programacion: {
+            titulo: "PROGRAMACIÓN",
+            desc: "Dominarás el desarrollo de aplicaciones web progresivas (PWA), lógica de algoritmos, diseño de interfaces y la creación de software escalable para el mundo digital.",
+            color: "from-teal-400 to-cyan-600"
+        },
+        mecatronica: {
+            titulo: "MECATRÓNICA",
+            desc: "Aprenderás a integrar sistemas mecánicos, electrónicos y de control. Diseñarás desde circuitos básicos hasta robots autónomos e industriales.",
+            color: "from-purple-500 to-indigo-700"
+        }
+    };
+
+    const data = info[taller];
+
+    app.innerHTML = `
+        <div class="min-h-screen p-6 flex items-center justify-center" style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
+            <div class="w-full max-w-sm bg-white p-8 rounded-3xl shadow-2xl text-center border-t-8 border-gray-900">
+                <h2 class="text-2xl font-black italic mb-4">${data.titulo}</h2>
+                <p class="text-gray-600 text-sm font-medium mb-8 leading-relaxed">${data.desc}</p>
+                <button onclick="mostrarEspecialidad()" 
+                        class="w-full py-4 bg-gradient-to-r ${data.color} text-white font-black rounded-xl hover:opacity-90 transition-all">
+                    ENTENDIDO
+                </button>
+            </div>
+        </div>
+    `;
+};
+
+window.mostrarSeleccionEscuela = () => {
+    app.innerHTML = `<div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+             style="${getGradientStyle(estadoRegistro.color)}">
+
+            ${decoracionCircuitos(estadoRegistro.color)}
 
             <div class="relative z-10 w-full max-w-md bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-white">
                 <h2 class="text-2xl font-black text-gray-900 mb-6 text-center italic tracking-tighter">Selecciona tu Escuela</h2>
                 
                 <div class="space-y-4">
-                    <button onclick="mostrarFormulario('Benemérito de las Américas')" 
+                    <button onclick="mostrarFormulario('Escuela primaria Patria')" 
                             class="w-full p-6 text-left border-2 border-gray-100 rounded-2xl hover:border-igniOrange hover:bg-orange-50 transition-all group">
-                        <span class="block font-bold text-gray-800 group-hover:text-igniRed uppercase text-sm">Benemérito de las Américas</span>
-                        <span class="text-[10px] text-gray-400 font-mono mt-1 block uppercase tracking-wider">Clave: 02EPR0111Z</span>
+                        <span class="block font-bold text-gray-800 group-hover:text-igniRed uppercase text-sm">Escuela primaria Patria</span>
+                        <span class="text-[10px] text-gray-400 font-mono mt-1 block uppercase tracking-wider">Clave: 02DPR0057F</span>
                     </button>
                     
                     <div class="p-6 border-2 border-dashed border-gray-100 rounded-2xl opacity-40 cursor-not-allowed text-center">
@@ -65,63 +179,52 @@ window.mostrarSeleccionEscuela = () => {
 window.mostrarFormulario = (escuela) => {
     app.innerHTML = `
         <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
-             style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
+             style="${getGradientStyle(estadoRegistro.color)}">
             
-            ${decoracionCircuitos()}
+            ${decoracionCircuitos(estadoRegistro.color)}
 
-            <div class="relative z-10 w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl border border-white/50">
-                
-                <div class="flex items-start justify-between mb-6 border-b border-gray-100 pb-5">
-                    <div>
-                        <p class="text-[9px] font-black text-igniOrange uppercase tracking-[0.2em] mb-1">Clave: 02EPR0111Z</p>
-                        <h2 class="text-3xl font-black text-gray-900 italic tracking-tighter leading-none">Inscripción</h2>
-                        <p class="text-[10px] text-gray-400 font-bold mt-2 uppercase">${escuela}</p>
-                    </div>
-                    <div class="p-2 bg-white rounded-xl shadow-sm border border-gray-50">
-                        <img src="logo-escuela.png" alt="Logo Escuela" class="w-14 h-14 object-contain">
-                    </div>
+            <div class="relative z-10 w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl">
+                <div class="mb-6 border-b border-gray-100 pb-5">
+                    <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">
+                        Especialidad: ${estadoRegistro.especialidad}
+                    </p>
+                    <h2 class="text-3xl font-black text-gray-900 italic tracking-tighter">Inscripción</h2>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Instructor: ${estadoRegistro.instructor}</p>
                 </div>
                 
                 <form id="registroForm" class="space-y-4">
+                    <input type="hidden" name="especialidad" value="${estadoRegistro.especialidad}">
+                    <input type="hidden" name="instructor" value="${estadoRegistro.instructor}">
+                    <input type="hidden" name="escuela" value="${escuela}">
+
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Nombre del Alumno</label>
                         <input type="text" required name="nombre" placeholder="Nombre completo" 
-                               class="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-igniOrange outline-none transition-all text-sm">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Grado</label>
-                            <select name="grado" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-igniOrange text-sm">
-                                <option value="3ero">3ero Primaria</option>
-                                <option value="4to">4to Primaria</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Grupo</label>
-                            <select name="grupo" id="selectGrupo" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-igniOrange text-sm">
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                            </select>
-                        </div>
+                               class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">¿Experiencia previa?</label>
-                        <select name="experiencia" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-igniOrange text-sm">
-                            <option value="ninguna">No, es mi primera vez</option>
-                            <option value="basica">Un poco (juegos/piezas)</option>
-                            <option value="avanzada">Sí, ya he tomado cursos</option>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Grado</label>
+                        <select name="grado" class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
+                            <option value="3ero">3ero Primaria</option>
+                            <option value="4to">4to Primaria</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Correo del Padre (para envío de código)</label>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Correo del Padre</label>
                         <input type="email" required name="contacto" placeholder="ejemplo@correo.com" 
-                               class="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-igniOrange outline-none transition-all text-sm">
+                               class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
                     </div>
 
-                    <button type="submit" id="btnConfirmar" class="w-full py-4 mt-3 bg-gray-900 text-white font-black rounded-xl hover:bg-black transition-all shadow-lg active:scale-95 uppercase tracking-widest text-xs">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">WhatsApp / Teléfono</label>
+                        <input type="tel" name="telefono" id="telefono" required placeholder="Ej. 686 123 4567"
+                                 class="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-gray-900 outline-none">
+                    </div>
+
+                    <button type="submit" id="btnConfirmar"
+                            class="w-full py-4 mt-3 bg-gray-900 text-white font-black rounded-xl hover:bg-black transition-all uppercase tracking-widest text-xs">
                         Confirmar Registro
                     </button>
                 </form>
@@ -129,32 +232,48 @@ window.mostrarFormulario = (escuela) => {
         </div>
     `;
 
-    document.getElementById('registroForm').onsubmit = async (e) => {
+    document.getElementById('registroForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const btn = document.getElementById('btnConfirmar');
-        btn.innerText = "PROCESANDO...";
-        btn.disabled = true;
 
-        const formData = new FormData(e.target);
+        const boton = document.getElementById('btnConfirmar');
+        boton.innerText = 'ENVIANDO...';
+        boton.disabled = true;
+
+        const formData = new FormData(this);
         const datos = Object.fromEntries(formData.entries());
-        const grupoFinal = datos.grupo.trim().toUpperCase();
-
+        datos.especialidad = estadoRegistro.especialidad;
+        
         try {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzSxSNTCB4iiIPWNCcUpFPg5m3qepetGeaukhMDSRMvGDu9A9qGXsgSyr9TuGOaaQTOpg/exec';
-            
-            await fetch(scriptURL, {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbwS324EO5sNudMNGPbu-hCf6G0-VLZK_VOQIGbr6qFokaPXozZt50GzwUjNcpqOHUIgnA/exec', {
                 method: 'POST',
-                mode: 'no-cors', 
                 body: JSON.stringify(datos)
             });
-            
-            mostrarExito(grupoFinal); 
-        } catch (error) {
-            alert("Error al enviar. Revisa tu internet.");
-            btn.innerText = "Confirmar Registro";
-            btn.disabled = false;
+
+            mostrarExito(); 
+        } catch (err) {
+            alert("Error de conexión, intenta de nuevo.");
+            boton.innerText = "Confirmar Registro";
+            boton.disabled = false;
         }
-    };
+    });
+};
+
+window.mostrarExito = () => {
+    app.innerHTML = `
+        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+             style="${getGradientStyle(estadoRegistro.color)}">
+            <div class="relative z-10 w-full max-w-sm bg-white p-10 rounded-3xl shadow-2xl text-center">
+                <h2 class="text-2xl font-black text-gray-900 italic tracking-tighter mb-4">¡REGISTRO EXITOSO!</h2>
+                <p class="text-sm font-bold text-gray-600 mb-8">
+                    Esté pendiente a su correo electrónico para más información.
+                </p>
+                <button onclick="window.location.reload()" 
+                        class="w-full py-4 bg-gray-900 text-white font-black rounded-xl hover:bg-black transition-all">
+                    VOLVER AL INICIO
+                </button>
+            </div>
+        </div>
+    `;
 };
 
 window.mostrarPortal = () => {
@@ -196,7 +315,7 @@ async function buscarCodigo() {
     btn.disabled = true;
 
     try {
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzSxSNTCB4iiIPWNCcUpFPg5m3qepetGeaukhMDSRMvGDu9A9qGXsgSyr9TuGOaaQTOpg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwS324EO5sNudMNGPbu-hCf6G0-VLZK_VOQIGbr6qFokaPXozZt50GzwUjNcpqOHUIgnA/exec';
         const response = await fetch(`${scriptURL}?codigo=${codigo}`);
         const data = await response.json();
 
@@ -229,44 +348,33 @@ async function buscarCodigo() {
     }
 }
 
-function mostrarExito(grupo) {
-    let nombreMaestro = (grupo === "A") ? "Jesús Ramón Gastelum Quijada" : "Adan Alberto Roman Carrillo";
+function decoracionCircuitos(color) {
+    const tealColor = '#0d9488';
+    const purpleColor = '#7e22ce';
 
-    app.innerHTML = `
-        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden text-center"
-             style="background: linear-gradient(to bottom, #FFFFFF 40%, #FFF0ED 80%, #FFD6CC 100%);">
-            
-            ${decoracionCircuitos()}
-
-            <div class="relative z-10">
-                <div class="text-6xl mb-6">🔥</div>
-                <h2 class="text-4xl font-black text-gray-900 mb-4 italic">¡REGISTRO EXITOSO!</h2>
-                
-                <div class="bg-white/70 backdrop-blur-md p-6 rounded-2xl border border-white shadow-xl max-w-sm mx-auto mb-6">
-                    <p class="text-[10px] text-gray-400 uppercase font-black mb-2">Tu instructor:</p>
-                    <p class="text-xl text-igniRed font-black italic mb-4">${nombreMaestro}</p>
-                    <p class="text-xs bg-orange-100 p-2 rounded-lg text-igniOrange font-bold uppercase">
-                        REVISA TU CORREO PARA OBTENER TU CÓDIGO
-                    </p>
-                </div>
-
-                <p class="text-sm text-gray-600 mb-8 max-w-xs mx-auto">Usa tu código en el "Portal del Alumno" para ver tus calificaciones.</p>
-
-                <button onclick="location.reload()" class="px-10 py-4 bg-black text-white font-black rounded-xl text-xs uppercase">FINALIZAR</button>
+    if (color === 'teal') {
+        return `
+            <div class="fixed top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
+                <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="pix" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <rect width="5" height="5" fill="${tealColor}"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#pix)" />
+                </svg>
             </div>
-        </div>
-    `;
+        `;
+    } else if (color === 'purple') {
+        return `
+            <div class="fixed top-0 left-0 w-full h-full opacity-20 pointer-events-none z-0">
+                <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="none">
+                    <circle cx="50" cy="50" r="40" stroke="${purpleColor}" stroke-width="20" fill="none" stroke-dasharray="20 10"/>
+                    <circle cx="150" cy="150" r="40" stroke="${purpleColor}" stroke-width="20" fill="none" stroke-dasharray="20 10"/>
+                </svg>
+            </div>
+        `;
+    }
+    return "";
 }
-
-function decoracionCircuitos() {
-    return `
-        <div class="absolute left-0 top-0 h-full w-24 md:w-48 opacity-10 pointer-events-none">
-            <svg viewBox="0 0 100 800" class="h-full w-full"><path d="M0 100 L40 100 L60 120 M0 250 L30 250 L50 230" stroke="#B20000" stroke-width="2" fill="none" /></svg>
-        </div>
-        <div class="absolute right-0 top-0 h-full w-24 md:w-48 opacity-10 pointer-events-none scale-x-[-1]">
-            <svg viewBox="0 0 100 800" class="h-full w-full"><path d="M0 150 L50 150 L70 170" stroke="#FF8C00" stroke-width="2" fill="none" /></svg>
-        </div>
-    `;
-}
-
 mostrarInicio();

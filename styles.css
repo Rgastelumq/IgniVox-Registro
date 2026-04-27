@@ -1,0 +1,16 @@
+.theme-programacion {
+    background: linear-gradient(to bottom, #004d40, #00acc1) !important;
+}
+
+.theme-mecatronica {
+    background: linear-gradient(to bottom, #4a148c, #d81b60) !important;
+}
+
+body {
+    transition: background 0.6s ease;
+    transition: background 0.8s ease-in-out;
+}
+
+button {
+    transition: all 0.3s ease-in-out;
+}
