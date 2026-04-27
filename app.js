@@ -218,7 +218,7 @@ window.mostrarFormulario = (escuela) => {
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold mb-2">WhatsApp / Teléfono</label>
+                        <label class="block text-sm font-bold mb-2">WhatsApp / Telefono de Madre, Padre o tutor</label>
                         <input type="tel" name="telefono" id="telefono" required placeholder="Ej. 686 123 4567"
                                  class="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-gray-900 outline-none">
                     </div>
