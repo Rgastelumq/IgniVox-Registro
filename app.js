@@ -16,11 +16,11 @@ function getGradientStyle(color) {
 function generarCodigoAlumno() {
     const esp = String(estadoRegistro.especialidad || '').toLowerCase();
     
-    let prefijo = 'gen';
+    let prefijo = 'PAT';
     if (esp.includes('programación') || esp.includes('programacion')) {
-        prefijo = 'prog';
+        prefijo = 'PROG';
     } else if (esp.includes('mecatrónica') || esp.includes('mecatronica')) {
-        prefijo = 'mec';
+        prefijo = 'MEC';
     }
     
     const numero = Math.floor(100 + Math.random() * 900);
@@ -244,7 +244,7 @@ window.mostrarFormulario = (escuela) => {
         datos.especialidad = estadoRegistro.especialidad;
         
         try {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbwS324EO5sNudMNGPbu-hCf6G0-VLZK_VOQIGbr6qFokaPXozZt50GzwUjNcpqOHUIgnA/exec', {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbzeeedNiiyGMmk_I0xxdDbf-P9JF30-SfbNpXI63oWGHjYNHGjjR97VRCFwC_swDVJw3w/exec', {
                 method: 'POST',
                 body: JSON.stringify(datos)
             });
@@ -288,7 +288,7 @@ window.mostrarPortal = () => {
                 <h2 class="text-2xl font-black text-gray-900 mb-2 italic uppercase">Portal Alumno</h2>
                 <p class="text-sm text-gray-400 mb-8">Ingresa tu código para ver avances</p>
                 
-                <input type="text" id="codigoInput" placeholder="BEN-XXXX" 
+                <input type="text" id="codigoInput" placeholder="PAT-XXXX" 
                        class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-xl mb-4 text-center font-mono font-bold outline-none focus:border-igniOrange uppercase">
                 
                 <div id="resultadoBusqueda" class="hidden mb-6 p-4 bg-orange-50 rounded-2xl border border-orange-100 text-left"></div>
@@ -306,7 +306,6 @@ window.mostrarPortal = () => {
 
 async function buscarCodigo() {
     const codigo = document.getElementById('codigoInput').value.trim().toUpperCase();
-    const resultadoDiv = document.getElementById('resultadoBusqueda');
     const btn = document.getElementById('btnConsulta');
 
     if (!codigo) return alert("Ingresa un código");
@@ -315,32 +314,17 @@ async function buscarCodigo() {
     btn.disabled = true;
 
     try {
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwS324EO5sNudMNGPbu-hCf6G0-VLZK_VOQIGbr6qFokaPXozZt50GzwUjNcpqOHUIgnA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzeeedNiiyGMmk_I0xxdDbf-P9JF30-SfbNpXI63oWGHjYNHGjjR97VRCFwC_swDVJw3w/exec';
         const response = await fetch(`${scriptURL}?codigo=${codigo}`);
         const data = await response.json();
 
-        if (data.error) {
-            alert("Código no encontrado.");
-            resultadoDiv.classList.add('hidden');
+        if (data.error || !data.nombre) {
+            alert("Código no encontrado o error en datos.");
         } else {
-            resultadoDiv.classList.remove('hidden');
-            resultadoDiv.innerHTML = `
-                <p class="text-[9px] font-black text-igniOrange uppercase mb-1">Alumno:</p>
-                <p class="font-bold text-gray-900 mb-2">${data.nombre}</p>
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-white p-2 rounded-lg border">
-                        <p class="text-[7px] text-gray-400 uppercase">Calificación</p>
-                        <p class="font-black text-igniRed">${data.calificacion}</p>
-                    </div>
-                    <div class="bg-white p-2 rounded-lg border">
-                        <p class="text-[7px] text-gray-400 uppercase">Grupo</p>
-                        <p class="font-bold text-gray-700">${data.grupo}</p>
-                    </div>
-                </div>
-                <p class="text-[9px] text-gray-500 mt-2 italic border-t pt-2 mt-2">"${data.observaciones}"</p>
-            `;
+            abrirPanelAlumno(data);
         }
     } catch (e) {
+        console.error(e);
         alert("Error de conexión.");
     } finally {
         btn.innerText = "CONSULTAR";
@@ -376,5 +360,55 @@ function decoracionCircuitos(color) {
         `;
     }
     return "";
+}
+
+function abrirPanelAlumno(datos) {
+    const esProg = String(datos.especialidad).toLowerCase().includes('prog');
+    const colorClave = esProg ? 'teal' : 'purple';
+    const gradienteBoton = esProg ? 'from-teal-400 to-cyan-600' : 'from-purple-500 to-indigo-700';
+
+    app.innerHTML = `
+        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+             style="${getGradientStyle(colorClave)}">
+            
+            ${decoracionCircuitos(colorClave)}
+
+            <div class="relative z-10 w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl border-t-8 ${esProg ? 'border-teal-500' : 'border-purple-600'}">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Portal del Alumno</h2>
+                        <h1 class="text-2xl font-black italic text-gray-900">¡HOLA, ${datos.nombre.split(' ')[0].toUpperCase()}!</h1>
+                    </div>
+                    <div class="bg-gray-100 p-2 rounded-xl">
+                        <span class="text-2xl">${esProg ? '💻' : '🤖'}</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Calificación</p>
+                        <p class="text-2xl font-black text-igniRed">${datos.calificacion || 'N/A'}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Área</p>
+                        <p class="text-xs font-black text-gray-700 uppercase">${datos.especialidad}</p>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100 mb-8">
+                    <p class="text-[10px] font-bold text-igniOrange uppercase mb-1">Observaciones del Instructor:</p>
+                    <p class="text-sm text-gray-700 italic">"${datos.observaciones || 'Sin comentarios por ahora.'}"</p>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="window.location.reload()" class="w-full py-4 bg-gray-900 text-white font-black rounded-xl shadow-lg hover:bg-black transition-all uppercase text-xs tracking-widest">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+            
+            <p class="mt-6 text-[10px] text-gray-400 font-bold uppercase tracking-tighter">IgniVox Labs © 2026</p>
+        </div>
+    `;
 }
 mostrarInicio();
