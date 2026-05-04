@@ -69,39 +69,29 @@ window.mostrarEspecialidad = () => {
                 <h2 class="text-3xl font-black text-gray-900 mb-8 italic tracking-tighter">ELIGE TU ÁREA</h2>
                 
                 <div class="space-y-4">
-                    <div class="relative">
-                        <button onclick="seleccionarEspecialidad('Programación', 'Jesús Ramón Gastelum Quijada', 'teal')" 
-                                class="w-full p-6 rounded-3xl bg-gradient-to-r from-teal-400 to-cyan-600 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
-                            <div class="bg-white p-3 rounded-2xl">
-                                <img src="logo-ignivox-programacion.png" alt="Prog" class="w-12 h-12 object-contain">
-                            </div>
-                            <div class="text-left">
-                                <span class="block text-xl font-black italic">PROGRAMACIÓN</span>
-                                <span class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Software & PWA</span>
-                            </div>
-                        </button>
-                        <button onclick="mostrarInfoTaller('programacion')" 
-                                class="absolute bottom-2 right-4 text-[9px] font-bold text-white underline opacity-70 hover:opacity-100 uppercase">
-                            Más información
-                        </button>
-                    </div>
+                    <!-- BOTÓN PROGRAMACIÓN -->
+                    <button onclick="seleccionarEspecialidad('Programación', 'Jesús Ramón Gastelum Quijada', 'teal')" 
+                            class="w-full p-6 rounded-3xl bg-gradient-to-r from-teal-400 to-cyan-600 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
+                        <div class="bg-white p-3 rounded-2xl">
+                            <img src="logo-ignivox-programacion.png" alt="Prog" class="w-12 h-12 object-contain">
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-xl font-black italic">PROGRAMACIÓN</span>
+                            <span class="block text-[9px] mt-1 font-bold bg-white/20 px-2 py-0.5 rounded-full text-center">📞 Tel: 686 245 0097</span>
+                        </div>
+                    </button>
 
-                    <div class="relative">
-                        <button onclick="seleccionarEspecialidad('Mecatronica', 'Adan Alberto Roman Carrillo', 'purple')" 
-                                class="w-full p-6 rounded-3xl bg-gradient-to-r from-purple-500 to-indigo-700 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
-                            <div class="bg-white p-3 rounded-2xl">
-                                <img src="logo-ignivox-mecatronica.png" alt="Meca" class="w-12 h-12 object-contain">
-                            </div>
-                            <div class="text-left">
-                                <span class="block text-xl font-black italic">MECATRÓNICA</span>
-                                <span class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Automatización & Robótica</span>
-                            </div>
-                        </button>
-                        <button onclick="mostrarInfoTaller('mecatronica')" 
-                                class="absolute bottom-2 right-4 text-[9px] font-bold text-white underline opacity-70 hover:opacity-100 uppercase">
-                            Más información
-                        </button>
-                    </div>
+                    <!-- BOTÓN MECATRÓNICA -->
+                    <button onclick="seleccionarEspecialidad('Mecatronica', 'Adan Alberto Roman Carrillo', 'purple')" 
+                            class="w-full p-6 rounded-3xl bg-gradient-to-r from-purple-500 to-indigo-700 text-white shadow-lg hover:scale-[1.02] transition-all flex items-center gap-6">
+                        <div class="bg-white p-3 rounded-2xl">
+                            <img src="logo-ignivox-mecatronica.png" alt="Meca" class="w-12 h-12 object-contain">
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-xl font-black italic">MECATRÓNICA</span>
+                            <span class="block text-[9px] mt-1 font-bold bg-white/20 px-2 py-0.5 rounded-full text-center">📞 Tel: 686 509 1893</span>
+                        </div>
+                    </button>
                 </div>
 
                 <button onclick="mostrarInicio()" class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
@@ -116,7 +106,6 @@ window.seleccionarEspecialidad = (especialidad, instructor, color) => {
     estadoRegistro = { especialidad, instructor, color };
     mostrarSeleccionEscuela();
 };
-
 window.mostrarInfoTaller = (taller) => {
     const info = {
         programacion: {
@@ -148,7 +137,47 @@ window.mostrarInfoTaller = (taller) => {
 };
 
 window.mostrarSeleccionEscuela = () => {
-    app.innerHTML = `<div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+    const hoy = new Date();
+    const dia = hoy.getDate();
+    const mes = hoy.getMonth();
+
+    let etiquetaHTML = '';
+
+    if (estadoRegistro.especialidad === 'Mecatronica') {
+        if (dia === 4 && mes === 4) {
+            etiquetaHTML = `
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter animate-pulse">
+                    ⚙️ ÚLTIMO DÍA DE INSCRIPCIÓN VIRTUAL
+                </div>`;
+        } else if (dia >= 5 && mes === 4) {
+            etiquetaHTML = `
+                <div class="absolute top-0 right-0 bg-green-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
+                    🟢 EN PROCESO
+                </div>`;
+        }
+    }
+
+    if (estadoRegistro.especialidad === 'Programación') {
+        if ((dia === 4 || dia === 5) && mes === 4) {
+            etiquetaHTML = `
+                <div class="absolute top-0 right-0 bg-teal-600 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
+                    REGISTRO VIRTUAL ABIERTO HASTA EL 6 DE MAYO
+                </div>`;
+        } else if (dia === 6 && mes === 4) {
+            etiquetaHTML = `
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter animate-pulse">
+                    💻 ÚLTIMO DÍA DE INSCRIPCIÓN VIRTUAL
+                </div>`;
+        } else if (dia >= 7 && mes === 4) {
+            etiquetaHTML = `
+                <div class="absolute top-0 right-0 bg-green-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
+                    🟢 EN PROCESO
+                </div>`;
+        }
+    }
+
+    app.innerHTML = `
+        <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
              style="${getGradientStyle(estadoRegistro.color)}">
 
             ${decoracionCircuitos(estadoRegistro.color)}
@@ -158,17 +187,16 @@ window.mostrarSeleccionEscuela = () => {
                 
                 <div class="space-y-4">
                     <button onclick="mostrarFormulario('Escuela primaria Patria')" 
-                            class="w-full p-6 text-left border-2 border-gray-100 rounded-2xl hover:border-igniOrange hover:bg-orange-50 transition-all group">
-                        <span class="block font-bold text-gray-800 group-hover:text-igniRed uppercase text-sm">Escuela primaria Patria</span>
+                            class="w-full p-6 text-left border-2 border-gray-100 rounded-2xl hover:border-igniOrange hover:bg-orange-50 transition-all group relative overflow-hidden">
+                        
+                        ${etiquetaHTML}
+
+                        <span class="block font-bold text-gray-800 group-hover:text-igniRed uppercase text-sm mt-2">Escuela primaria Patria</span>
                         <span class="text-[10px] text-gray-400 font-mono mt-1 block uppercase tracking-wider">Clave: 02DPR0057F</span>
                     </button>
-                    
-                    <div class="p-6 border-2 border-dashed border-gray-100 rounded-2xl opacity-40 cursor-not-allowed text-center">
-                        <span class="block font-bold text-gray-300 text-sm italic">Próximamente...</span>
-                    </div>
                 </div>
                 
-                <button onclick="mostrarInicio()" class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest w-full text-center hover:text-gray-600">
+                <button onclick="mostrarInicio()" class="mt-8 text-gray-400 text-[10px] font-bold uppercase tracking-widest w-full text-center">
                     ← Volver al inicio
                 </button>
             </div>
@@ -177,13 +205,39 @@ window.mostrarSeleccionEscuela = () => {
 };
 
 window.mostrarFormulario = (escuela) => {
+    const hoy = new Date();
+    const dia = hoy.getDate();
+    const mes = hoy.getMonth();
+
+    const esMecaBloqueado = escuela === 'Escuela primaria Patria' && 
+                            estadoRegistro.especialidad === 'Mecatronica' && 
+                            dia >= 5 && mes === 4;
+
+    const esProgBloqueado = escuela === 'Escuela primaria Patria' && 
+                            estadoRegistro.especialidad === 'Programación' && 
+                            dia >= 7 && mes === 4;
+
+    const estaBloqueado = esMecaBloqueado || esProgBloqueado;
+
+    const contacto = estadoRegistro.especialidad === 'Mecatronica' 
+                     ? { tel: '6865091893', msg: '686 509 1893' } 
+                     : { tel: '6862450097', msg: '686 245 0097' };
+
     app.innerHTML = `
         <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
              style="${getGradientStyle(estadoRegistro.color)}">
             
             ${decoracionCircuitos(estadoRegistro.color)}
 
-            <div class="relative z-10 w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl">
+            <div class="relative z-10 w-full max-w-md bg-white/95 p-8 rounded-3xl shadow-2xl overflow-hidden">
+                
+                <!-- CARITA TRISTE SUPERPUESTA -->
+                ${estaBloqueado ? `
+                    <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                        <span class="text-[150px] font-black text-gray-400/20 select-none">:(</span>
+                    </div>
+                ` : ''}
+
                 <div class="mb-6 border-b border-gray-100 pb-5">
                     <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">
                         Especialidad: ${estadoRegistro.especialidad}
@@ -192,72 +246,102 @@ window.mostrarFormulario = (escuela) => {
                     <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Instructor: ${estadoRegistro.instructor}</p>
                 </div>
                 
-                <form id="registroForm" class="space-y-4">
+                <form id="registroForm" class="space-y-4 ${estaBloqueado ? 'opacity-20 pointer-events-none' : ''}">
                     <input type="hidden" name="especialidad" value="${estadoRegistro.especialidad}">
                     <input type="hidden" name="instructor" value="${estadoRegistro.instructor}">
                     <input type="hidden" name="escuela" value="${escuela}">
 
+                    <!-- NOMBRE -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Nombre del Alumno</label>
                         <input type="text" required name="nombre" placeholder="Nombre completo" 
-                               class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
+                               class="w-full p-3 bg-gray-50 rounded-xl outline-none text-sm focus:ring-2 focus:ring-${estadoRegistro.color}-500">
                     </div>
 
+                    <!-- GRADO -->
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Grado</label>
-                        <select name="grado" class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
+                        <select name="grado" class="w-full p-3 bg-gray-50 rounded-xl outline-none text-sm focus:ring-2 focus:ring-${estadoRegistro.color}-500">
                             <option value="3ero">3ero Primaria</option>
                             <option value="4to">4to Primaria</option>
                         </select>
                     </div>
 
+                    <!-- CORREO -->
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Correo del Padre</label>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">Correo del Padre, madre o tutor</label>
                         <input type="email" required name="contacto" placeholder="ejemplo@correo.com" 
-                               class="w-full p-3 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-${estadoRegistro.color}-500 text-sm">
+                               class="w-full p-3 bg-gray-50 rounded-xl outline-none text-sm focus:ring-2 focus:ring-${estadoRegistro.color}-500">
                     </div>
 
+                    <!-- WHATSAPP -->
                     <div>
-                        <label class="block text-sm font-bold mb-2">WhatsApp / Telefono de Madre, Padre o tutor</label>
-                        <input type="tel" name="telefono" id="telefono" required placeholder="Ej. 686 123 4567"
-                                 class="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-gray-900 outline-none">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1 tracking-widest">WhatsApp / Teléfono del padre, madre o tutor</label>
+                        <input type="tel" name="telefono" required placeholder="686 123 4567"
+                               class="w-full p-3 bg-gray-50 rounded-xl outline-none text-sm focus:ring-2 focus:ring-${estadoRegistro.color}-500">
                     </div>
 
-                    <button type="submit" id="btnConfirmar"
-                            class="w-full py-4 mt-3 bg-gray-900 text-white font-black rounded-xl hover:bg-black transition-all uppercase tracking-widest text-xs">
-                        Confirmar Registro
-                    </button>
+                    ${!estaBloqueado ? `
+                        <button type="submit" id="btnConfirmar"
+                                class="w-full py-4 mt-3 bg-gray-900 text-white font-black rounded-xl hover:bg-black transition-all uppercase tracking-widest text-xs">
+                            Confirmar Registro
+                        </button>
+                    ` : ''}
                 </form>
+
+                <!-- SECCIÓN DE BLOQUEO CON LINK DE CONSULTA -->
+                ${estaBloqueado ? `
+                    <div class="relative z-30 mt-4 text-center">
+                        <div class="p-4 bg-green-50 border border-green-100 rounded-2xl">
+                            <p class="text-green-700 font-black italic text-sm uppercase tracking-tighter">
+                                Taller en curso<span class="animacion-puntos"></span>
+                            </p>
+                            <p class="text-[9px] text-green-600 font-bold mt-1 uppercase">
+                                El registro virtual ha cerrado
+                            </p>
+                        </div>
+                        
+                        <a href="https://wa.me/52${contacto.tel}?text=Hola,%20me%20interesa%20consultar%20sobre%20el%20taller%20de%20${estadoRegistro.especialidad}%20en%20la%20Escuela%20Patria" 
+                           target="_blank"
+                           class="inline-block mt-3 text-blue-600 text-[11px] font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">
+                            [ Consultar vía WhatsApp ]
+                        </a>
+                    </div>
+                ` : ''}
+
+                <button onclick="mostrarSeleccionEscuela()" class="relative z-30 mt-6 w-full text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                    ← Regresar
+                </button>
             </div>
         </div>
     `;
 
-    document.getElementById('registroForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    const form = document.getElementById('registroForm');
+    if (form && !estaBloqueado) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const boton = document.getElementById('btnConfirmar');
+            boton.innerText = 'ENVIANDO...';
+            boton.disabled = true;
 
-        const boton = document.getElementById('btnConfirmar');
-        boton.innerText = 'ENVIANDO...';
-        boton.disabled = true;
-
-        const formData = new FormData(this);
-        const datos = Object.fromEntries(formData.entries());
-        datos.especialidad = estadoRegistro.especialidad;
-        
-        try {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbzeeedNiiyGMmk_I0xxdDbf-P9JF30-SfbNpXI63oWGHjYNHGjjR97VRCFwC_swDVJw3w/exec', {
-                method: 'POST',
-                body: JSON.stringify(datos)
-            });
-
-            mostrarExito(); 
-        } catch (err) {
-            alert("Error de conexión, intenta de nuevo.");
-            boton.innerText = "Confirmar Registro";
-            boton.disabled = false;
-        }
-    });
+            const formData = new FormData(this);
+            const datos = Object.fromEntries(formData.entries());
+            
+            try {
+                await fetch('https://script.google.com/macros/s/AKfycbzeeedNiiyGMmk_I0xxdDbf-P9JF30-SfbNpXI63oWGHjYNHGjjR97VRCFwC_swDVJw3w/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(datos)
+                });
+                mostrarExito(); 
+            } catch (err) {
+                alert("Error de conexión, intenta de nuevo.");
+                boton.innerText = "Confirmar Registro";
+                boton.disabled = false;
+            }
+        });
+    }
 };
-
 window.mostrarExito = () => {
     app.innerHTML = `
         <div class="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
