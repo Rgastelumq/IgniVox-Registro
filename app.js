@@ -158,17 +158,7 @@ window.mostrarSeleccionEscuela = () => {
     }
 
     if (estadoRegistro.especialidad === 'Programación') {
-        if ((dia === 4 || dia === 5) && mes === 4) {
-            etiquetaHTML = `
-                <div class="absolute top-0 right-0 bg-teal-600 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
-                    REGISTRO VIRTUAL ABIERTO HASTA EL 6 DE MAYO
-                </div>`;
-        } else if (dia === 6 && mes === 4) {
-            etiquetaHTML = `
-                <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter animate-pulse">
-                    💻 ÚLTIMO DÍA DE INSCRIPCIÓN VIRTUAL
-                </div>`;
-        } else if (dia >= 7 && mes === 4) {
+        if (dia >= 4 && mes === 4) {
             etiquetaHTML = `
                 <div class="absolute top-0 right-0 bg-green-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
                     🟢 EN PROCESO
@@ -215,7 +205,7 @@ window.mostrarFormulario = (escuela) => {
 
     const esProgBloqueado = escuela === 'Escuela primaria Patria' && 
                             estadoRegistro.especialidad === 'Programación' && 
-                            dia >= 7 && mes === 4;
+                            dia >= 4 && mes === 4;
 
     const estaBloqueado = esMecaBloqueado || esProgBloqueado;
 
