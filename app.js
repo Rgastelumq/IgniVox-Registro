@@ -158,7 +158,7 @@ window.mostrarSeleccionEscuela = () => {
     }
 
     if (estadoRegistro.especialidad === 'Programación') {
-        if (dia >= 4 && mes === 4) {
+        if (dia >= 7 && mes === 4) {
             etiquetaHTML = `
                 <div class="absolute top-0 right-0 bg-green-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
                     🟢 EN PROCESO
@@ -205,7 +205,7 @@ window.mostrarFormulario = (escuela) => {
 
     const esProgBloqueado = escuela === 'Escuela primaria Patria' && 
                             estadoRegistro.especialidad === 'Programación' && 
-                            dia >= 4 && mes === 4;
+                            dia >= 7 && mes === 4;
 
     const estaBloqueado = esMecaBloqueado || esProgBloqueado;
 
