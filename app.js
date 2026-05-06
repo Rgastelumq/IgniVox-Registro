@@ -158,10 +158,10 @@ window.mostrarSeleccionEscuela = () => {
     }
 
     if (estadoRegistro.especialidad === 'Programación') {
-        if (dia >= 7 && mes === 4) {
+        if (dia >= 5 && mes === 4) {
             etiquetaHTML = `
                 <div class="absolute top-0 right-0 bg-green-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-tighter">
-                    🟢 EN PROCESO
+                    CUPO LLENO, ESPERE...
                 </div>`;
         }
     }
