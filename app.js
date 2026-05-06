@@ -205,7 +205,7 @@ window.mostrarFormulario = (escuela) => {
 
     const esProgBloqueado = escuela === 'Escuela primaria Patria' && 
                             estadoRegistro.especialidad === 'Programación' && 
-                            dia >= 7 && mes === 4;
+                            dia >= 5 && mes === 4;
 
     const estaBloqueado = esMecaBloqueado || esProgBloqueado;
 
